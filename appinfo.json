@@ -1,0 +1,19 @@
+{
+    "appKeys": {},
+    "capabilities": [
+        ""
+    ],
+    "companyName": "Richard Gilbert",
+    "longName": "NotiFox",
+    "projectType": "native",
+    "resources": {
+        "media": []
+    },
+    "shortName": "NotiFox",
+    "uuid": "42a10d1a-fd03-4d98-b296-2737d083b3ad",
+    "versionCode": 1,
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": false
+    }
+}
