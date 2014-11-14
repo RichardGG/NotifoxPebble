@@ -3,6 +3,10 @@
 #include <pebble.h>
 
 void in_received_handler(DictionaryIterator *iter, void *context) {
+	Tuple *tuple = dict_find(iter, 0);
+	int value = tuple->value->int32;
+	
+	APP_LOG(APP_LOG_LEVEL_INFO, "got message %d", value);
 	
 }
 
@@ -36,7 +40,7 @@ void setup_app_message()
 	//send a message
 	DictionaryIterator *iter;
  	app_message_outbox_begin(&iter);
-	Tuplet value = TupletInteger(1, 0);
+	Tuplet value = TupletInteger(0, 42);
 	dict_write_tuplet(iter, &value);
 	app_message_outbox_send();
 	
