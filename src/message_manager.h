@@ -4,9 +4,9 @@
 
 void in_received_handler(DictionaryIterator *iter, void *context) {
 	Tuple *tuple = dict_find(iter, 0);
-	int value = tuple->value->int32;
+	char* value = tuple->value->cstring;
 	
-	APP_LOG(APP_LOG_LEVEL_INFO, "got message %d", value);
+	APP_LOG(APP_LOG_LEVEL_INFO, "got message %s", value);
 	
 }
 
