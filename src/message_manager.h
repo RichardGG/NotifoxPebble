@@ -1,12 +1,40 @@
 #pragma once
 
 #include <pebble.h>
+#include <notif_data.h>
 
 void in_received_handler(DictionaryIterator *iter, void *context) {
-	Tuple *tuple = dict_find(iter, 0);
-	char* value = tuple->value->cstring;
 	
-	APP_LOG(APP_LOG_LEVEL_INFO, "got message %s", value);
+	
+	
+	//type 
+	Tuple *tuple = dict_find(iter, 0);
+	int type = tuple->value->int8;
+	
+	tuple = dict_find(iter, 1);
+	
+	if(type == 0)
+	{
+		char* value = tuple->value->cstring;
+		strcpy(title[0], value);
+	}
+	else
+	{
+		int ICON_MESSAGE_ROWS = 16;
+		
+		uint8_t* byteArray = tuple->value->data;
+		tuple = dict_find(iter, 2);
+
+		int starting_row = tuple->value->int32;
+
+		for(int additional_rows = 0; additional_rows < ICON_MESSAGE_ROWS; additional_rows++)
+		{
+			for(int i =0; i < 6; i++)
+			{
+				icon_data[0][i + (64/8)*(starting_row+additional_rows)] = byteArray[i+(48/8)*additional_rows];
+			}
+		}
+	}
 	
 }
 

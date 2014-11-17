@@ -15,7 +15,7 @@ static void action_list_draw_row(GContext* ctx, const Layer *cell_layer, MenuInd
 	menu_cell_basic_draw(ctx, cell_layer, "Basic Item", "With a subtitle", NULL);
 }
 
-void action_list_select(MenuLayer *menu_layer, MenuIndex *cell_index, void *data) {
+static void action_list_select(MenuLayer *menu_layer, MenuIndex *cell_index, void *data) {
 	//any window created here must be destroyed!
 }
 	

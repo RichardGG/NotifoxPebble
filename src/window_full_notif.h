@@ -1,9 +1,14 @@
 #pragma once
 
 #include "pebble.h"
+	
+Window* full_notif_window; //self
+
 
 //this will need to be multiple layers (2?)
-static ScrollLayer *full_notif_scroll_layer;	
+static ScrollLayer *full_notif_scroll_layer;
+
+TextLayer *title_text_layer;
 	
 void window_full_notif_load(Window *window) {
 	
@@ -11,11 +16,11 @@ void window_full_notif_load(Window *window) {
 	Layer *window_layer = window_get_root_layer(window);
 	GRect bounds = layer_get_frame(window_layer);
 	
-	//create scroll layer
+	//CREATE scroll layer
 	full_notif_scroll_layer = scroll_layer_create(bounds);
 	
-	//create test text layer
-	TextLayer *title_text_layer = text_layer_create(GRect(0, 0, bounds.size.w, 500));
+	//CREATE test text layer
+	title_text_layer = text_layer_create(GRect(0, 0, bounds.size.w, 500));
     text_layer_set_text(title_text_layer, 
 						"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus elementum laoreet diam, ultricies convallis nibh sagittis et. Pellentesque ex velit, condimentum sit amet felis in, lobortis rutrum lectus. Nullam dictum sit amet urna ut dictum. Vivamus vulputate purus non odio tincidunt tempus. Nullam at arcu maximus, semper purus non, dapibus dui. Curabitur sed massa sodales, posuere neque nec, euismod nibh. Nunc convallis suscipit felis, a aliquam nibh. Quisque ullamcorper risus ac velit ultrices, venenatis pulvinar est porta. Praesent vel mattis nunc. Integer pellentesque risus eu quam aliquet molestie. Donec dictum massa eget felis sodales, mattis vehicula quam pellentesque. Nullam suscipit ornare elit sed tristique. Cras id velit justo. Vestibulum accumsan purus vel elit mattis ultrices. Pellentesque congue, turpis non blandit rutrum, dolor mi sodales elit, id dapibus lorem ex ut ante. Mauris aliquam dui vitae metus lobortis aliquam."
 						);
@@ -31,5 +36,11 @@ void window_full_notif_load(Window *window) {
 }
 
 void window_full_notif_unload(Window *window) {
+	//DESTROY scroll layer
 	scroll_layer_destroy(full_notif_scroll_layer);
+	//DESTROY text layer
+	text_layer_destroy(title_text_layer);
+	
+	//DESTROY self
+	window_destroy(full_notif_window);
 }
