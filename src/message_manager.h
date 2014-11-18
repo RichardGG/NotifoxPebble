@@ -3,10 +3,37 @@
 #include <pebble.h>
 #include <notif_data.h>
 
+//incoming message types
+enum {
+	IDS,				//count, position, nID, nID, nID, nID
+	NOTIFICATION,		//nID, vibrate, title, text
+	ICON_DATA,			//nID, section, bits
+	IMAGE_DATA,			//nID, total, section, png
+	
+	ACTIONS,			//nID?, title, title, title, page, page, page
+	ACTION_ICON_DATA,	//nID?, aID, section, bits
+	PAGE_DATA,			//nID?, pID?, text?
+};
+
+//outgoing message types
+enum{
+	REQUEST_ACTIVE, 		//position
+	REQUEST_PAGE,			//nID, pID
+	DISMISS_NOTIFICATION, 	//nID
+	TAKE_ACTION				//nID, aID
+};
+
 void in_received_handler(DictionaryIterator *iter, void *context) {
 	
+	//Parse message
 	
+	Tuple *tuple = dict_find(iter, 0);
+	uint8_t* bytes = tuple->value->data;
 	
+	for(int i=0;i<136;i++)
+		APP_LOG(APP_LOG_LEVEL_INFO, "bytes[%i] = %u", i, bytes[i]);
+	
+	/*
 	//type 
 	Tuple *tuple = dict_find(iter, 0);
 	int type = tuple->value->int8;
@@ -34,7 +61,7 @@ void in_received_handler(DictionaryIterator *iter, void *context) {
 				icon_data[0][i + (64/8)*(starting_row+additional_rows)] = byteArray[i+(48/8)*additional_rows];
 			}
 		}
-	}
+	}*/
 	
 }
 
@@ -58,8 +85,11 @@ void setup_app_message()
 	app_message_register_outbox_failed(out_failed_handler);
 
 	//set size
-	const uint32_t inbound_size = 512;
-	const uint32_t outbound_size = 64;
+	const uint32_t inbound_size = app_message_inbox_size_maximum();
+	const uint32_t outbound_size = 32;
+	
+	APP_LOG(APP_LOG_LEVEL_INFO, "inbox size: %lu", inbound_size);
+	
 	app_message_open(inbound_size, outbound_size);
 	
 	//fix this, based on time
@@ -68,7 +98,7 @@ void setup_app_message()
 	//send a message
 	DictionaryIterator *iter;
  	app_message_outbox_begin(&iter);
-	Tuplet value = TupletInteger(0, 42);
+	Tuplet value = TupletInteger(0, REQUEST_ACTIVE);
 	dict_write_tuplet(iter, &value);
 	app_message_outbox_send();
 	
