@@ -23,15 +23,25 @@ enum{
 	TAKE_ACTION				//nID, aID
 };
 
+int bytes_to_int(uint8_t* pointer){
+	return ((int)pointer[0]<<3*8) + ((int)pointer[1]<<2*8) + ((int)pointer[2]<<8) + ((int)pointer[3]);
+}
+
 void in_received_handler(DictionaryIterator *iter, void *context) {
 	
 	//Parse message
 	
 	Tuple *tuple = dict_find(iter, 0);
-	uint8_t* bytes = tuple->value->data;
+	uint8_t* message_data = tuple->value->data;
 	
-	for(int i=0;i<136;i++)
-		APP_LOG(APP_LOG_LEVEL_INFO, "bytes[%i] = %u", i, bytes[i]);
+	uint8_t metadata = message_data[0];
+	
+	total_notifications = message_data[1];
+	
+	for(int i=0; i<4; i++) {
+		ids[i] = bytes_to_int(&(message_data[i*4+3]));
+	}
+	
 	
 	/*
 	//type 
@@ -64,6 +74,8 @@ void in_received_handler(DictionaryIterator *iter, void *context) {
 	}*/
 	
 }
+
+
 
 void out_sent_handler(DictionaryIterator *sent, void *context) {
 	// outgoing message was delivered

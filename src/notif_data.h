@@ -12,6 +12,11 @@ static GBitmap icon[CACHE_SIZE];
 static uint8_t icon_data[CACHE_SIZE][ICON_SIZE];
 
 
+int range_start;
+int ids[4];
+int total_notifications;
+
+
 
 void create_bitmaps(){
 	for(int i=0; i<CACHE_SIZE; i++){	

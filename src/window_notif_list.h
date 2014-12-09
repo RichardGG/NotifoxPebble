@@ -21,8 +21,18 @@ static void notif_list_draw_row(GContext* ctx, const Layer *cell_layer, MenuInde
 	graphics_draw_bitmap_in_rect(ctx, &icon[0], GRect(0,6,48,48));
 	graphics_context_set_compositing_mode(ctx, GCompOpAssign);
 	graphics_context_set_text_color(ctx, GColorBlack);
-	graphics_draw_text(ctx, "Natalia Mokwinski", fonts_get_system_font(FONT_KEY_GOTHIC_18), GRect(48,0,96,16), GTextOverflowModeTrailingEllipsis, GTextAlignmentLeft, NULL);
-	graphics_draw_text(ctx, "Hey, where are you? I'm outside.", fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD), GRect(48,18,96,48), GTextOverflowModeTrailingEllipsis, GTextAlignmentLeft, NULL);
+	
+	char test[100];
+	
+	test[0] = '-';
+	test[1] = '\0';
+	
+	snprintf(test, 100, "%d: %d, %d, %d, %d", total_notifications, ids[0], ids[1], ids[2], ids[3]);
+	
+	graphics_draw_text(ctx, test, fonts_get_system_font(FONT_KEY_GOTHIC_18), GRect(48,0,96,16), GTextOverflowModeTrailingEllipsis, GTextAlignmentLeft, NULL);
+	
+	//graphics_draw_text(ctx, "title", fonts_get_system_font(FONT_KEY_GOTHIC_18), GRect(48,0,96,16), GTextOverflowModeTrailingEllipsis, GTextAlignmentLeft, NULL);
+	//graphics_draw_text(ctx, "text", fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD), GRect(48,18,96,48), GTextOverflowModeTrailingEllipsis, GTextAlignmentLeft, NULL);
 }
 
 void notif_list_select(MenuLayer *menu_layer, MenuIndex *cell_index, void *data) {
