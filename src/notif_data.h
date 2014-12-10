@@ -16,6 +16,8 @@ int range_start;
 int ids[4];
 int total_notifications;
 
+void (*update_callback)(void);
+
 
 
 void create_bitmaps(){

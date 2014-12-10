@@ -42,6 +42,8 @@ void in_received_handler(DictionaryIterator *iter, void *context) {
 		ids[i] = bytes_to_int(&(message_data[i*4+3]));
 	}
 	
+	update_callback();
+	
 	
 	/*
 	//type 
@@ -87,6 +89,18 @@ void in_dropped_handler(AppMessageResult reason, void *context) {
 	// incoming message dropped
 }
 
+void request_ids(int pos)
+{
+	//send a message
+	DictionaryIterator *iter;
+ 	app_message_outbox_begin(&iter);
+	Tuplet value = TupletInteger(0, REQUEST_ACTIVE);
+	dict_write_tuplet(iter, &value);
+	Tuplet value2 = TupletInteger(1,pos);
+	dict_write_tuplet(iter, &value2);
+	app_message_outbox_send();
+}
+
 
 void setup_app_message()
 {
@@ -107,11 +121,8 @@ void setup_app_message()
 	//fix this, based on time
 	app_comm_set_sniff_interval(SNIFF_INTERVAL_REDUCED);
 	
-	//send a message
-	DictionaryIterator *iter;
- 	app_message_outbox_begin(&iter);
-	Tuplet value = TupletInteger(0, REQUEST_ACTIVE);
-	dict_write_tuplet(iter, &value);
-	app_message_outbox_send();
+	
+	//initial request (SHOULDN'T BE CALLED ON NEW NOTIFICATION)
+	request_ids(0);
 	
 }

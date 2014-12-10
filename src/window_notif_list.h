@@ -2,6 +2,7 @@
 #include "pebble.h"
 #include "notif_data.h"
 #include "window_full_notif.h"
+#include "message_manager.h"
 	
 Window* notif_list_window; //self
 
@@ -48,8 +49,20 @@ void notif_list_select(MenuLayer *menu_layer, MenuIndex *cell_index, void *data)
 
   window_stack_push(full_notif_window, true /* Animated */);
 }
+
+void update_notif_list()
+{
+	menu_layer_reload_data(notif_list_menu_layer);
+}
+
+void notif_list_change(struct MenuLayer *menu_layer, MenuIndex new_index, MenuIndex old_index, void *callback_context) {
+	request_ids(new_index.row);
+}
 	
 void window_notif_list_load(Window *window) {
+	
+	//update should call update_notif_list()
+	update_callback = update_notif_list;
 	
 	Layer *window_layer = window_get_root_layer(window);
 	GRect bounds = layer_get_frame(window_layer);
@@ -62,6 +75,7 @@ void window_notif_list_load(Window *window) {
 		.get_cell_height = notif_list_cell_height,
 		.draw_row = notif_list_draw_row,
 		.select_click = notif_list_select,
+		.selection_changed = notif_list_change,
 	});
 	
 	//allow menu layer to handle buttons
